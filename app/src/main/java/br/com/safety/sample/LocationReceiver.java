@@ -14,10 +14,9 @@ public class LocationReceiver extends BroadcastReceiver implements ILocationCons
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("TEST DATA:", "onReceiver");
-        if (null != intent && intent.getAction().equals(LOACTION_ACTION)) {
+        if (null != intent && intent.getAction().equals("my.action")) {
             String locationData = intent.getStringExtra(LOCATION_MESSAGE);
-            Log.d("TEST DATA:", locationData);
+            Log.d("TEST DATA: ", locationData);
         }
     }
 

@@ -24,6 +24,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     protected Location mCurrentLocation;
 
+    protected long interval;
+
+    protected String actionReceiver;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,6 +35,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        this.interval = intent.getLongExtra("UPDATE_INTERVAL_IN_MILLISECONDS", 10000);
+        this.actionReceiver = intent.getStringExtra("ACTION_RECEIVER");
+
         buildGoogleApiClient();
         mGoogleApiClient.connect();
         if (mGoogleApiClient.isConnected()) {
@@ -51,7 +58,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setInterval(this.interval);
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
@@ -83,7 +90,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private void sendLocationBroadcast(String sbLocationData) {
         Intent locationIntent = new Intent();
-        locationIntent.setAction(LOACTION_ACTION);
+        locationIntent.setAction(this.actionReceiver);
         locationIntent.putExtra(LOCATION_MESSAGE, sbLocationData);
         sendBroadcast(locationIntent);
     }

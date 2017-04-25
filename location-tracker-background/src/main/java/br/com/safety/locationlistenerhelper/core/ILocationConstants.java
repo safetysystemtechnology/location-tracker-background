@@ -8,9 +8,7 @@ public interface ILocationConstants {
 
     long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
-    String LOACTION_ACTION = "br.com.safety.sample.LOCATION_ACTION";
-
-    String LOCATION_MESSAGE = "br.com.safety.sample.LOCATION_DATA";
+    String LOCATION_MESSAGE = "LOCATION_DATA";
 
     int PERMISSION_ACCESS_LOCATION_CODE = 99;
 

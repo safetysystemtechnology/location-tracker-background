@@ -14,22 +14,39 @@ import com.github.kayvannj.permission_utils.PermissionUtil;
 /**
  * @author josevieira
  */
-public class LocationHelper implements ILocationConstants {
+public class LocationTracker implements ILocationConstants {
 
     private LocationService locationService;
 
     private PermissionUtil.PermissionRequestObject mBothPermissionRequest;
 
-    public LocationHelper() {
+    private long updateIntervalInMilliSeconds = 0;
+
+    private String actionReceiver;
+
+    public LocationTracker(String actionReceiver) {
+        this.actionReceiver = actionReceiver;
     }
 
-    public LocationHelper start(Context context, AppCompatActivity appCompatActivity) {
+    /**
+     * update interval in milliseconds
+     * @param interval
+     * @return
+     */
+    public LocationTracker setInterval(long interval) {
+        this.updateIntervalInMilliSeconds = interval;
+        return this;
+    }
+
+    public LocationTracker start(Context context, AppCompatActivity appCompatActivity) {
         checkPermissions(context, appCompatActivity);
         return this;
     }
 
     private void startLocationService(Context context, AppCompatActivity appCompatActivity) {
         Intent serviceIntent = new Intent(context, LocationService.class);
+        serviceIntent.putExtra("UPDATE_INTERVAL_IN_MILLISECONDS", this.updateIntervalInMilliSeconds);
+        serviceIntent.putExtra("ACTION_RECEIVER", this.actionReceiver);
         context.startService(serviceIntent);
     }
 
