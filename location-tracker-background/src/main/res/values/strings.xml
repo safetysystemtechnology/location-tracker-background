@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Location Listener Helper</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="last_update_time_label">Last location update time</string>
+    <string name="distance">Distance</string>
+</resources>
