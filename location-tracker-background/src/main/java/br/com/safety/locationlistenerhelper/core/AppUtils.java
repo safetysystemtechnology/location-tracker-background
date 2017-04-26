@@ -3,7 +3,7 @@ package br.com.safety.locationlistenerhelper.core;
 import android.os.Build;
 
 /**
- * @author josevieira
+ * @author netodevel
  */
 public class AppUtils {
 

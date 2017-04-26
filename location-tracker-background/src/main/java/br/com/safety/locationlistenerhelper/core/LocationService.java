@@ -1,7 +1,9 @@
 package br.com.safety.locationlistenerhelper.core;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -14,6 +16,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+/**
+ * @author netodevel
+ */
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ILocationConstants {
 
     private static final String TAG = LocationService.class.getSimpleName();
@@ -28,17 +33,39 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     protected String actionReceiver;
 
+    protected Boolean gps;
+
+    protected Boolean netWork;
+
+    private AppPreferences appPreferences;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        appPreferences = new AppPreferences(getBaseContext());
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        this.interval = intent.getLongExtra("UPDATE_INTERVAL_IN_MILLISECONDS", 10000);
-        this.actionReceiver = intent.getStringExtra("ACTION_RECEIVER");
+
+        if (this.actionReceiver == null) {
+            this.actionReceiver = this.appPreferences.getString("ACTION", "LOCATION.ACTION");
+        }
+
+        if (this.interval <= 0){
+            this.interval = this.appPreferences.getLong("INTERVAL", 10000L);
+        }
+
+        if (this.gps == null) {
+            this.gps = this.appPreferences.getBoolean("GPS", true);
+        }
+
+        if (this.netWork == null) {
+            this.netWork = this.appPreferences.getBoolean("NETWORK", false);
+        }
 
         buildGoogleApiClient();
+
         mGoogleApiClient.connect();
         if (mGoogleApiClient.isConnected()) {
             startLocationUpdates();
@@ -60,7 +87,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(this.interval);
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        if (this.gps) {
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        } else if (this.netWork){
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        }
     }
 
     protected void startLocationUpdates() {

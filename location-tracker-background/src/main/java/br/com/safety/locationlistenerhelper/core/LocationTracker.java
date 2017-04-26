@@ -12,7 +12,7 @@ import com.github.kayvannj.permission_utils.Func2;
 import com.github.kayvannj.permission_utils.PermissionUtil;
 
 /**
- * @author josevieira
+ * @author netodevel
  */
 public class LocationTracker implements ILocationConstants {
 
@@ -20,37 +20,47 @@ public class LocationTracker implements ILocationConstants {
 
     private PermissionUtil.PermissionRequestObject mBothPermissionRequest;
 
-    private long updateIntervalInMilliSeconds = 0;
+    private long interval = 0;
 
     private String actionReceiver;
+
+    private Boolean gps;
+
+    private Boolean netWork;
+
+    private AppPreferences appPreferences;
 
     public LocationTracker(String actionReceiver) {
         this.actionReceiver = actionReceiver;
     }
 
-    /**
-     * update interval in milliseconds
-     * @param interval
-     * @return
-     */
     public LocationTracker setInterval(long interval) {
-        this.updateIntervalInMilliSeconds = interval;
+        this.interval = interval;
+        return this;
+    }
+
+    public LocationTracker setGps(Boolean gps) {
+        this.gps = gps;
+        return this;
+    }
+
+    public LocationTracker setNetWork(Boolean netWork) {
+        this.netWork = netWork;
         return this;
     }
 
     public LocationTracker start(Context context, AppCompatActivity appCompatActivity) {
-        checkPermissions(context, appCompatActivity);
+        validatePermissions(context, appCompatActivity);
         return this;
     }
 
     private void startLocationService(Context context, AppCompatActivity appCompatActivity) {
         Intent serviceIntent = new Intent(context, LocationService.class);
-        serviceIntent.putExtra("UPDATE_INTERVAL_IN_MILLISECONDS", this.updateIntervalInMilliSeconds);
-        serviceIntent.putExtra("ACTION_RECEIVER", this.actionReceiver);
+        saveSettingsInLocalStorage(context);
         context.startService(serviceIntent);
     }
 
-    public void checkPermissions(Context context, AppCompatActivity appCompatActivity) {
+    public void validatePermissions(Context context, AppCompatActivity appCompatActivity) {
         if (AppUtils.hasM() && !(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             askPermissions(context, appCompatActivity);
@@ -79,6 +89,14 @@ public class LocationTracker implements ILocationConstants {
         if (null != mBothPermissionRequest) {
             mBothPermissionRequest.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    public void saveSettingsInLocalStorage(Context context) {
+        this.appPreferences = new AppPreferences(context);
+        if (this.interval != 0) { this.appPreferences.putLong("INTERVAL", this.interval); }
+        this.appPreferences.putString("ACTION", this.actionReceiver);
+        this.appPreferences.putBoolean("GPS", this.gps);
+        this.appPreferences.putBoolean("NETWORK", this.netWork);
     }
 
 }
