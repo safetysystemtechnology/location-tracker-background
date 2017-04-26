@@ -39,7 +39,11 @@ private LocationTracker locationTracker;
   @Override
   protected void onStart() {
       super.onStart();
-      new LocationTracker("my.action").setInterval(10000).start(getBaseContext(), this);
+      new LocationTracker("my.action")
+                .setInterval(50000)
+                .setGps(true)
+                .setNetWork(false)
+                .start(getBaseContext(), this);
   }
 
   @Override
