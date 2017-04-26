@@ -1,9 +1,7 @@
 package br.com.safety.locationlistenerhelper.core;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -19,7 +17,7 @@ import com.google.android.gms.location.LocationServices;
 /**
  * @author netodevel
  */
-public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ILocationConstants {
+public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String TAG = LocationService.class.getSimpleName();
 
@@ -86,7 +84,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(this.interval);
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(this.interval / 2);
         if (this.gps) {
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         } else if (this.netWork){
@@ -122,7 +120,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private void sendLocationBroadcast(String sbLocationData) {
         Intent locationIntent = new Intent();
         locationIntent.setAction(this.actionReceiver);
-        locationIntent.putExtra(LOCATION_MESSAGE, sbLocationData);
+        locationIntent.putExtra(SettingsLocationTracker.LOCATION_MESSAGE, sbLocationData);
         sendBroadcast(locationIntent);
     }
 

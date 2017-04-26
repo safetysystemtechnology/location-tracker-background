@@ -14,7 +14,7 @@ import com.github.kayvannj.permission_utils.PermissionUtil;
 /**
  * @author netodevel
  */
-public class LocationTracker implements ILocationConstants {
+public class LocationTracker {
 
     private LocationService locationService;
 
@@ -82,7 +82,7 @@ public class LocationTracker implements ILocationConstants {
                             }
                         }
 
-                    }).ask(PERMISSION_ACCESS_LOCATION_CODE);
+                    }).ask(SettingsLocationTracker.PERMISSION_ACCESS_LOCATION_CODE);
     }
 
     public void onRequestPermission(int requestCode, String[] permissions, int[] grantResults) {
