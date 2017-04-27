@@ -1,9 +1,25 @@
 
 
 # location-tracker-background
-Periodically tracking and recording user's location in the background
+Periodically tracking user's location in the background
 
 ## Install 
+Add the dependecy
+
+```gradle
+allprojects {
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+  }
+}
+
+dependencies {
+  compile 'com.github.safetysystemtechnology:location-tracker-background:v1.0'
+}
+
+```
+
 
 Todo
 
@@ -28,7 +44,7 @@ Todo
 ## Usage
 
 ```java
-private LocationTracker locationTracker;
+  private LocationTracker locationTracker;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +89,7 @@ public class LocationReceiver extends BroadcastReceiver implements ILocationCons
 
     The MIT License (MIT)
 
-    Copyright (c) Safety
+    Copyright (c) Safety System Technology
 
     Permission is hereby granted, free of charge, to any person obtaining a 
     copy of this software and associated documentation files (the "Software"), 
