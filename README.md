@@ -1,3 +1,5 @@
+![](https://jitpack.io/v/safetysystemtechnology/location-tracker-background.svg)
+
 
 
 # location-tracker-background
@@ -19,9 +21,6 @@ dependencies {
 }
 
 ```
-
-
-Todo
 
 ### Add permissions in your AndroidManifest.xml
 
