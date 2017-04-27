@@ -100,24 +100,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
     private void updateService() {
         if (null != mCurrentLocation) {
-            StringBuilder sbLocationData = new StringBuilder();
-            sbLocationData.append("Latitude:")
-                    .append(" ")
-                    .append(mCurrentLocation.getLatitude())
-                    .append("\n")
-                    .append("Longitude:")
-                    .append(" ")
-                    .append(mCurrentLocation.getLongitude())
-                    .append("\n")
-                    .append(" ");
-            sendLocationBroadcast(sbLocationData.toString());
-            Log.d("UPDATE: ", sbLocationData.toString());
+            sendLocationBroadcast(this.mCurrentLocation);
+            Log.d("Info: ", "send broadcast location data");
         } else {
-            Toast.makeText(this, "Deined", Toast.LENGTH_SHORT).show();
+            Log.d("Error: ", "Permission deined");
         }
     }
 
-    private void sendLocationBroadcast(String sbLocationData) {
+    private void sendLocationBroadcast(Location sbLocationData) {
         Intent locationIntent = new Intent();
         locationIntent.setAction(this.actionReceiver);
         locationIntent.putExtra(SettingsLocationTracker.LOCATION_MESSAGE, sbLocationData);
