@@ -45,27 +45,33 @@ dependencies {
 ```java
   private LocationTracker locationTracker;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_main);
-  }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
 
-  @Override
-  protected void onStart() {
-      super.onStart();
-      new LocationTracker("my.action")
+    @Override
+    protected void onStart() {
+        super.onStart();
+        locationTracker=new LocationTracker("my.action")
                 .setInterval(50000)
                 .setGps(true)
                 .setNetWork(false)
                 .start(getBaseContext(), this);
-  }
+    }
 
-  @Override
-  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-      locationTracker.onRequestPermission(requestCode, permissions, grantResults);
-      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-  }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        locationTracker.onRequestPermission(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationTracker.stopLocationService(this);
+    }
 ```
 
 Create your `BroadcastReceiver` to get informations of location

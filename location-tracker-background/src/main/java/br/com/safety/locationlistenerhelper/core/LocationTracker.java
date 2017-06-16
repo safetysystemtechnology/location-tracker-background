@@ -16,8 +16,6 @@ import com.github.kayvannj.permission_utils.PermissionUtil;
  */
 public class LocationTracker {
 
-    private LocationService locationService;
-
     private PermissionUtil.PermissionRequestObject mBothPermissionRequest;
 
     private long interval = 0;
@@ -27,8 +25,6 @@ public class LocationTracker {
     private Boolean gps;
 
     private Boolean netWork;
-
-    private AppPreferences appPreferences;
 
     public LocationTracker(String actionReceiver) {
         this.actionReceiver = actionReceiver;
@@ -54,10 +50,21 @@ public class LocationTracker {
         return this;
     }
 
-    private void startLocationService(Context context, AppCompatActivity appCompatActivity) {
+    private void startLocationService(Context context) {
         Intent serviceIntent = new Intent(context, LocationService.class);
         saveSettingsInLocalStorage(context);
         context.startService(serviceIntent);
+    }
+
+    /**
+     * Stop locaiton service if running
+     * @param context Context
+     */
+    public void stopLocationService(Context context){
+        if(LocationService.isRunning(context)) {
+            Intent serviceIntent = new Intent(context, LocationService.class);
+            context.stopService(serviceIntent);
+        }
     }
 
     public void validatePermissions(Context context, AppCompatActivity appCompatActivity) {
@@ -65,7 +72,7 @@ public class LocationTracker {
                 && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             askPermissions(context, appCompatActivity);
         } else {
-             startLocationService(context, appCompatActivity);
+             startLocationService(context);
         }
     }
 
@@ -76,7 +83,7 @@ public class LocationTracker {
                         @Override
                         protected void call(int requestCode, String[] permissions, int[] grantResults) {
                             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                                startLocationService(context, appCompatActivity);
+                                startLocationService(context);
                             } else {
                                 Toast.makeText(context, "Permission Deined", Toast.LENGTH_LONG).show();
                             }
@@ -92,11 +99,11 @@ public class LocationTracker {
     }
 
     public void saveSettingsInLocalStorage(Context context) {
-        this.appPreferences = new AppPreferences(context);
-        if (this.interval != 0) { this.appPreferences.putLong("INTERVAL", this.interval); }
-        this.appPreferences.putString("ACTION", this.actionReceiver);
-        this.appPreferences.putBoolean("GPS", this.gps);
-        this.appPreferences.putBoolean("NETWORK", this.netWork);
+        AppPreferences appPreferences = new AppPreferences(context);
+        if (this.interval != 0) { appPreferences.putLong("INTERVAL", this.interval); }
+        appPreferences.putString("ACTION", this.actionReceiver);
+        appPreferences.putBoolean("GPS", this.gps);
+        appPreferences.putBoolean("NETWORK", this.netWork);
     }
 
 }
