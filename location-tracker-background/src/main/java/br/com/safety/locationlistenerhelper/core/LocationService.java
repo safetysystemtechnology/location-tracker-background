@@ -98,7 +98,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     protected void startLocationUpdates() {
         try {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            if (mGoogleApiClient.isConnected()) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
         } catch (SecurityException ex) {
         }
     }
@@ -119,7 +121,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
     }
 
     @Override
