@@ -1,12 +1,12 @@
 package br.com.safety.locationlistenerhelper.core;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -36,6 +36,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     protected Boolean netWork;
 
     private AppPreferences appPreferences;
+
+    public static boolean isRunning(Context context) {
+        return AppUtils.isServiceRunning(context, LocationService.class);
+    }
 
     @Override
     public void onCreate() {

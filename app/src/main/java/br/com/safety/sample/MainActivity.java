@@ -1,6 +1,7 @@
 package br.com.safety.sample;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import br.com.safety.locationlistenerhelper.core.LocationTracker;
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new LocationTracker("my.action")
+        locationTracker=new LocationTracker("my.action")
                 .setInterval(50000)
                 .setGps(true)
                 .setNetWork(false)
@@ -26,9 +27,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         locationTracker.onRequestPermission(requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationTracker.stopLocationService(this);
+    }
 }
