@@ -14,6 +14,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import static br.com.safety.locationlistenerhelper.core.SettingsLocationTracker.ACTION_CURRENT_LOCATION_BROADCAST;
+import static br.com.safety.locationlistenerhelper.core.SettingsLocationTracker.ACTION_PERMISSION_DEINED;
+
 /**
  * @author netodevel
  */
@@ -104,11 +107,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         } catch (SecurityException ex) {
         }
     }
+
     private void updateService() {
         if (null != mCurrentLocation) {
             sendLocationBroadcast(this.mCurrentLocation);
+            sendCurrentLocationBroadCast(this.mCurrentLocation);
             Log.d("Info: ", "send broadcast location data");
         } else {
+            sendPermissionDeinedBroadCast();
             Log.d("Error: ", "Permission deined");
         }
     }
@@ -117,6 +123,19 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Intent locationIntent = new Intent();
         locationIntent.setAction(this.actionReceiver);
         locationIntent.putExtra(SettingsLocationTracker.LOCATION_MESSAGE, sbLocationData);
+        sendBroadcast(locationIntent);
+    }
+
+    private void sendCurrentLocationBroadCast(Location sbLocationData) {
+        Intent locationIntent = new Intent();
+        locationIntent.setAction(ACTION_CURRENT_LOCATION_BROADCAST);
+        locationIntent.putExtra(SettingsLocationTracker.LOCATION_MESSAGE, sbLocationData);
+        sendBroadcast(locationIntent);
+    }
+
+    private void sendPermissionDeinedBroadCast() {
+        Intent locationIntent = new Intent();
+        locationIntent.setAction(SettingsLocationTracker.ACTION_PERMISSION_DEINED);
         sendBroadcast(locationIntent);
     }
 
