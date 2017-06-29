@@ -17,7 +17,7 @@ allprojects {
 }
 
 dependencies {
-  compile 'com.github.safetysystemtechnology:location-tracker-background:v1.1'
+  compile 'com.github.safetysystemtechnology:location-tracker-background:v1.2'
 }
 
 ```
