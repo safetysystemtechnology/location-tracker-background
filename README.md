@@ -43,7 +43,7 @@ dependencies {
 ## Usage
 
 ```java
-  private LocationTracker locationTracker;
+    private LocationTracker locationTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,23 @@ dependencies {
                 .setInterval(50000)
                 .setGps(true)
                 .setNetWork(false)
+                
+                // IF YOU WANT JUST CURRENT LOCATION
+                // .currentLocation(new CurrentLocationReceiver(new CurrentLocationListener() {
+                //
+                //            @Override
+                //            public void onCurrentLocation(Location location) {
+                //               Log.d("callback", ":onCurrentLocation" + location.getLongitude());
+                //               locationTracker.stopLocationService(getBaseContext());
+                //            }
+                //
+                //            @Override
+                //            public void onPermissionDiened() {
+                //                Log.d("callback", ":onPermissionDiened");
+                //                locationTracker.stopLocationService(getBaseContext());
+                //            }
+                // }))
+                        
                 .start(getBaseContext(), this);
     }
 
