@@ -58,7 +58,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
 
         if (this.interval <= 0){
-            this.interval = this.appPreferences.getLong("INTERVAL", 10000L);
+            this.interval = this.appPreferences.getLong("LOCATION_INTERVAL", 10000L);
         }
 
         if (this.gps == null) {

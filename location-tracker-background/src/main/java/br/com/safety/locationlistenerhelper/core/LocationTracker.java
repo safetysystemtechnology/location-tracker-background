@@ -14,10 +14,12 @@ import android.widget.Toast;
 import com.github.kayvannj.permission_utils.Func2;
 import com.github.kayvannj.permission_utils.PermissionUtil;
 
+import java.io.Serializable;
+
 /**
  * @author netodevel
  */
-public class LocationTracker {
+public class LocationTracker implements Serializable {
 
     /**
      * ask permissions
@@ -145,7 +147,7 @@ public class LocationTracker {
 
     public void saveSettingsInLocalStorage(Context context) {
         AppPreferences appPreferences = new AppPreferences(context);
-        if (this.interval != 0) { appPreferences.putLong("INTERVAL", this.interval); }
+        if (this.interval != 0) { appPreferences.putLong("LOCATION_INTERVAL", this.interval); }
         appPreferences.putString("ACTION", this.actionReceiver);
         appPreferences.putBoolean("GPS", this.gps);
         appPreferences.putBoolean("NETWORK", this.netWork);
