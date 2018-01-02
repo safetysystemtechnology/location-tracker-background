@@ -1,15 +1,11 @@
 package br.com.safety.sample;
 
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import br.com.safety.locationlistenerhelper.core.CurrentLocationListener;
-import br.com.safety.locationlistenerhelper.core.CurrentLocationReceiver;
 import br.com.safety.locationlistenerhelper.core.LocationTracker;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,20 +27,7 @@ public class MainActivity extends AppCompatActivity {
                         .setInterval(1000)
                         .setGps(true)
                         .setNetWork(false)
-                        .currentLocation(new CurrentLocationReceiver(new CurrentLocationListener() {
-
-                            @Override
-                            public void onCurrentLocation(Location location) {
-                                Log.d("callback", ":onCurrentLocation" + location.getLongitude());
-                                locationTracker.stopLocationService(getBaseContext());
-                            }
-
-                            @Override
-                            public void onPermissionDiened() {
-                                Log.d("callback", ":onPermissionDiened");
-                                locationTracker.stopLocationService(getBaseContext());
-                            }
-                        })).start(getBaseContext(), MainActivity.this);
+                        .start(getBaseContext());
             }
         });
     }

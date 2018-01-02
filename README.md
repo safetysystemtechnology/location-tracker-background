@@ -76,6 +76,9 @@ dependencies {
                 // }))
                         
                 .start(getBaseContext(), this);
+
+                // IF YOU WANT RUN IN SERVICE
+                // .start(this);
     }
 
     @Override

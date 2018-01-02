@@ -92,6 +92,17 @@ public class LocationTracker implements Serializable {
         return this;
     }
 
+    public LocationTracker start(Context context) {
+        startLocationService(context);
+
+        if (this.currentLocationReceiver != null) {
+            IntentFilter intentFilter = new IntentFilter(SettingsLocationTracker.ACTION_CURRENT_LOCATION_BROADCAST);
+            intentFilter.addAction(SettingsLocationTracker.ACTION_PERMISSION_DEINED);
+            context.registerReceiver(this.currentLocationReceiver, intentFilter);
+        }
+        return this;
+    }
+
     private void startLocationService(Context context) {
         Intent serviceIntent = new Intent(context, LocationService.class);
         saveSettingsInLocalStorage(context);
